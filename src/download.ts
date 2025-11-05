@@ -1,4 +1,4 @@
-import JSZip from 'jszip'
+import { downloadZip } from 'client-zip'
 
 export interface DownloadOptions {
   projectId: string
@@ -22,7 +22,22 @@ interface StackBlitzProjectResponse {
   project: StackBlitzProject
 }
 
-async function createZip(options: Omit<DownloadOptions, 'outputPath'>): Promise<JSZip> {
+/**
+ * Downloads a StackBlitz project and returns it as a Response (universal)
+ *
+ * @param options - Configuration options for the download
+ * @returns Response containing the zip file
+ *
+ * @example
+ * ```ts
+ * import { downloadToResponse } from 'stackblitz-zip'
+ *
+ * const response = await downloadToResponse({
+ *   projectId: 'nuxt-starter-k7spa3r4'
+ * })
+ * ```
+ */
+export async function downloadToResponse(options: Omit<DownloadOptions, 'outputPath'>): Promise<Response> {
   const {
     projectId,
     timeout = 30000,
@@ -63,8 +78,7 @@ async function createZip(options: Omit<DownloadOptions, 'outputPath'>): Promise<
       console.log(`Found ${Object.keys(projectData.appFiles).length} files in project`)
     }
 
-    // Create a zip file
-    const zip = new JSZip()
+    const files: Array<{ name: string, lastModified?: Date, input: string | Uint8Array }> = []
     let totalSize = 0
 
     // Add all files to the zip
@@ -105,10 +119,10 @@ async function createZip(options: Omit<DownloadOptions, 'outputPath'>): Promise<
         // eslint-disable-next-line no-console
         console.log(`Adding file: ${normalizedPath}`)
       }
-      zip.file(normalizedPath, fileData.contents)
+      files.push({ name: normalizedPath, input: fileData.contents })
     }
 
-    return zip
+    return downloadZip(files)
   }
   catch (error) {
     clearTimeout(timeoutId)
@@ -162,19 +176,21 @@ function normalizePath(path: string): string {
 export async function downloadToFile(options: DownloadOptions): Promise<string> {
   const { projectId, outputPath, verbose = false } = options
 
-  const zip = await createZip(options)
+  const zipResponse = await downloadToResponse(options)
 
   // Dynamically import Node.js modules
   const { resolve } = await import('node:path')
   const { writeFile } = await import('node:fs/promises')
+  const { Buffer } = await import('node:buffer')
   const process = await import('node:process')
 
   // Determine output path
   const finalOutputPath = outputPath || resolve(process.cwd(), `${projectId}.zip`)
 
   // Generate and write the zip file
-  const content = await zip.generateAsync({ type: 'nodebuffer' })
-  await writeFile(finalOutputPath, content)
+  const blob = await zipResponse.blob()
+  const buffer = Buffer.from(await blob.arrayBuffer())
+  await writeFile(finalOutputPath, buffer)
 
   if (verbose) {
     // eslint-disable-next-line no-console
@@ -191,8 +207,9 @@ export async function downloadToFile(options: DownloadOptions): Promise<string> 
  * @returns ArrayBuffer containing the zip file
  */
 export async function downloadToBuffer(options: Omit<DownloadOptions, 'outputPath'>): Promise<ArrayBuffer> {
-  const zip = await createZip(options)
-  return zip.generateAsync({ type: 'arraybuffer' })
+  const zipResponse = await downloadToResponse(options)
+  const blob = await zipResponse.blob()
+  return blob.arrayBuffer()
 }
 
 /**
@@ -202,8 +219,8 @@ export async function downloadToBuffer(options: Omit<DownloadOptions, 'outputPat
  * @returns Blob containing the zip file
  */
 export async function downloadToBlob(options: Omit<DownloadOptions, 'outputPath'>): Promise<Blob> {
-  const zip = await createZip(options)
-  return zip.generateAsync({ type: 'blob' })
+  const zipResponse = await downloadToResponse(options)
+  return zipResponse.blob()
 }
 
 /**

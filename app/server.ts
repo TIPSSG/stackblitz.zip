@@ -1,5 +1,5 @@
 import { defineHandler, HTTPError } from 'nitro/h3'
-import { downloadToBlob, parseUrl } from 'stackblitz-zip'
+import { downloadToResponse, parseUrl } from 'stackblitz-zip'
 
 export default defineHandler(async (event) => {
   const { pathname } = event.url
@@ -19,13 +19,13 @@ export default defineHandler(async (event) => {
 
   try {
     const projectId = parseUrl(stackblitzUrl)
-    const blob = await downloadToBlob({ projectId, verbose: true })
+    const response = await downloadToResponse({ projectId, verbose: true })
 
     // Set headers for file download
     event.res.headers.set('Content-Type', 'application/zip')
     event.res.headers.set('Content-Disposition', `attachment; filename="${projectId}.zip"`)
 
-    return blob
+    return response.blob()
   }
   catch (error) {
     throw new HTTPError({

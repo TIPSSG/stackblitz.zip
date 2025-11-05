@@ -40,7 +40,7 @@
     "test:types": "tsc --noEmit"
   },
   "dependencies": {
-    "jszip": "^3.10.1"
+    "client-zip": "^2.4.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "latest",
@@ -55,6 +55,7 @@
     "simple-git-hooks": "latest",
     "tsdown": "latest",
     "typescript": "latest",
+    "unzipit": "^1.4.3",
     "vitest": "latest"
   },
   "resolutions": {

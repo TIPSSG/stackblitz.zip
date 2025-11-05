@@ -1,2 +1,2 @@
-export { downloadToBlob, downloadToBuffer, downloadToFile, parseUrl } from './download'
+export { downloadToBlob, downloadToBuffer, downloadToFile, downloadToResponse, parseUrl } from './download'
 export type { DownloadOptions } from './download'

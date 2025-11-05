@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, unlinkSync } from 'node:fs'
 import { resolve } from 'node:path'
-import JSZip from 'jszip'
+import { unzip } from 'unzipit'
 import { afterEach, describe, expect, it } from 'vitest'
 import { downloadToBuffer, downloadToFile, parseUrl } from '../src'
 
@@ -31,8 +31,8 @@ describe('downloadToFile', () => {
 
     // Verify the zip contains files
     const zipData = readFileSync(outputPath)
-    const zip = await JSZip.loadAsync(zipData)
-    const fileNames = Object.keys(zip.files)
+    const { entries } = await unzip(zipData)
+    const fileNames = Object.keys(entries)
     expect(fileNames.length).toBeGreaterThan(0)
 
     // Check for expected files
@@ -68,8 +68,8 @@ describe('downloadToFile', () => {
     })
 
     const zipData = readFileSync(outputPath)
-    const zip = await JSZip.loadAsync(zipData)
-    const fileNames = Object.keys(zip.files)
+    const { entries } = await unzip(zipData)
+    const fileNames = Object.keys(entries)
 
     // Should not contain node_modules or .git paths
     const hasNodeModules = fileNames.some(f => f.includes('node_modules/'))
@@ -115,8 +115,8 @@ describe('downloadToBuffer', () => {
     expect(buffer.byteLength).toBeGreaterThan(0)
 
     // Verify it's a valid zip
-    const zip = await JSZip.loadAsync(buffer)
-    const fileNames = Object.keys(zip.files)
+    const { entries } = await unzip(buffer)
+    const fileNames = Object.keys(entries)
     expect(fileNames.length).toBeGreaterThan(0)
     expect(fileNames).toContain('package.json')
   }, 30000)
