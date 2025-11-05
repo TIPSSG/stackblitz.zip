@@ -7,6 +7,7 @@ export default defineConfig({
       config: {
         routeRules: {
           '/': { isr: true },
+          '/**': { isr: 60 },
         },
       },
     }),
