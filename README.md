@@ -23,14 +23,11 @@ No authentication or API keys required!
 ## CLI
 
 ```bash
-# install globally
-npm install -g stackblitz-zip
-
 # download a project
-stackblitz-download https://stackblitz.com/edit/nuxt-starter-k7spa3r4
+npx stackblitz-zip https://stackblitz.com/edit/nuxt-starter-k7spa3r4
 
 # specify output path
-stackblitz-download https://stackblitz.com/edit/nuxt-starter-k7spa3r4 my-project.zip
+npx stackblitz-zip https://stackblitz.com/edit/nuxt-starter-k7spa3r4 my-project.zip
 ```
 
 ## Programmatic Usage
