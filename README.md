@@ -31,7 +31,7 @@ Download:  https://stackblitz.zip/edit/nuxt-starter-k7spa3r4
 - ⚗️ Built on [Nitro](https://nitro.build/)
 - ▲ Deployed on [Vercel](http://vercel.com)
 
-👉 [see source](https://github.com/danielroe/stackblitz.zip/tree/main/app/)
+👉 [see source](https://github.com/stackblitz-labs/stackblitz.zip/tree/main/app/)
 
 ## CLI
 
@@ -199,7 +199,7 @@ Parse a StackBlitz URL and extract the project ID.
 
 ```bash
 # clone this repository
-git clone https://github.com/danielroe/stackblitz.zip
+git clone https://github.com/stackblitz-labs/stackblitz.zip
 
 # install dependencies
 corepack enable
@@ -224,7 +224,7 @@ Published under [MIT License](./LICENCE).
 [npm-version-href]: https://npmjs.com/package/stackblitz-zip
 [npm-downloads-src]: https://img.shields.io/npm/dm/stackblitz-zip?style=flat-square
 [npm-downloads-href]: https://npm.chart.dev/stackblitz-zip
-[github-actions-src]: https://img.shields.io/github/actions/workflow/status/danielroe/stackblitz.zip/ci.yml?branch=main&style=flat-square
-[github-actions-href]: https://github.com/danielroe/stackblitz.zip/actions?query=workflow%3Aci
-[codecov-src]: https://img.shields.io/codecov/c/gh/danielroe/stackblitz.zip/main?style=flat-square
-[codecov-href]: https://codecov.io/gh/danielroe/stackblitz.zip
+[github-actions-src]: https://img.shields.io/github/actions/workflow/status/stackblitz-labs/stackblitz.zip/ci.yml?branch=main&style=flat-square
+[github-actions-href]: https://github.com/stackblitz-labs/stackblitz.zip/actions?query=workflow%3Aci
+[codecov-src]: https://img.shields.io/codecov/c/gh/stackblitz-labs/stackblitz.zip/main?style=flat-square
+[codecov-href]: https://codecov.io/gh/stackblitz-labs/stackblitz.zip
